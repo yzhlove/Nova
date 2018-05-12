@@ -14,13 +14,12 @@ class Tools
     public static function date_with_microtime()
     {
         list($usec, $sec) = explode(' ', microtime());
-        return date('Y-m-d H:i:s') . ltrim($usec, '0');
+        return date('Y-m-d H:i:s',$sec) . ltrim($usec, '0');
     }
 
     public static function remoteIP()
     {
         static $realip = null;
-
         if ($realip !== null) {
             return $realip;
         }

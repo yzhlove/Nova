@@ -25,8 +25,39 @@ class Session {
         );
     }
 
+    public static function open() {
+        self::generateSessionSid();
+        self::$_REDIS_CACHE = Redis::getInstance();
+        return true;
+    }
 
+    public static function read() {
+        $session_value = self::$_REDIS_CACHE->get(self::$_SESSION_ID,SESSION_TABLE_NAME);
+        if ($session_value)
+            $_SESSION = $session_value;
+        return true;
+    }
 
+    public static function write() {
+        if (!empty($_SESSION))
+            self::$_REDIS_CACHE->set(self::$_SESSION_ID,$_SESSION,SESSION_TABLE_NAME,SESSION_TIMEOUT);
+        return true;
+    }
+
+    public static function destory() {
+        if (self::$_REDIS_CACHE->exists(self::$_SESSION_ID,SESSION_TABLE_NAME))
+            self::$_REDIS_CACHE->delete(self::$_SESSION_ID,SESSION_TABLE_NAME);
+        setcookie(SESSION_NAME,self::$_SESSION_ID,1,COOK_PATH,COOK_DOMAIN,FALSE);
+        return true;
+    }
+
+    public static function close() {
+        return true;
+    }
+
+    public static function gc() {
+        return true;
+    }
 
     # 生成一个session_sid
     public static function generateSessionSid() {
@@ -42,6 +73,5 @@ class Session {
             self::$_SESSION_ID = $arrayList[SESSION_NAME];
         return self::$_SESSION_ID;
     }
-
 
 }

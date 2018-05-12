@@ -19,8 +19,8 @@ class Redis extends \Redis
     private $groupPath = REDIS_ROOT;
     public $redisKey = "";
 
-    const _REDIS_HOST = "";
-    const _REDIS_PORT = "";
+    const _REDIS_HOST = "127.0.0.1";
+    const _REDIS_PORT = "6379";
 
     public function __construct()
     {
